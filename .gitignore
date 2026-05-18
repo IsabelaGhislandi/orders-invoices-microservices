@@ -1,0 +1,3 @@
+rabbitmq/
+**/node_modules/
+**/.env*
