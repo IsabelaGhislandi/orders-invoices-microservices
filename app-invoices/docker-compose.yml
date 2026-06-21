@@ -1,0 +1,12 @@
+## INTANCIAR PGSQL NO DOCKER COMPOSE
+services:
+  invoices-pg:
+    image: bitnami/postgresql:latest
+    ports:
+      - 5483:5483
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=invoices
+    volumes:
+      - ./docker:/docker-entrypoint-initdb.d
