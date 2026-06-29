@@ -6,6 +6,23 @@ services:
       - 15672:15672
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
+  api-gateway:
+    image: kong:3.9
+    environment:
+      - KONG_DATABASE=off
+      - KONG_ADMIN_LISTEN=0.0.0.0:8001
+      - KONG_ADMIN_GUI_URL=http://localhost:8002
+      - KONG_DECLARATIVE_CONFIG=/kong/config.yaml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - "./docker/kong/config.yaml:/kong/config.yaml"
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+      - "8443:8443"
+      - "8444:8444"
   jaeger:
     image: jaegertracing/all-in-one:1.57
     ports:
