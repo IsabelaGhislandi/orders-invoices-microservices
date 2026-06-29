@@ -6,8 +6,6 @@ import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fas
 import { trace } from "@opentelemetry/api";
 import { orders } from "../db/order.ts";
 import { db } from "../db/client.ts";
-import { tracer } from "../tracer/tracer.ts";
-import { setTimeout } from "node:timers/promises"
 import { dispatchOrderCreatedMessage } from "../../broker/messages/order-created.ts";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -42,18 +40,6 @@ app.post('/orders', {
         customerId: 1,
     }).returning({ id: orders.id });
     const orderId = order.id;
-    const span = tracer.startSpan("eu acho q pode tar dando merda aqui");
-    try {
-        span.setAttribute("order_id", orderId);
-        await setTimeout(2000); 
-        dispatchOrderCreatedMessage({
-            orderId: String(orderId),
-            amount,
-            customer: { id: 1 },
-        });
-    } finally {
-        span.end();
-    }
     trace.getActiveSpan()?.setAttribute("order_id", orderId);
     dispatchOrderCreatedMessage({
         orderId: String(orderId),
