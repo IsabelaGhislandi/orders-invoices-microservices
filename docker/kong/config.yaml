@@ -20,7 +20,7 @@ services:
     url: http://host.docker.internal:3334
     protocol: http
     host: host.docker.internal
-    port: 3333
+    port: 3334
     path: /
     routes:
       - name: api-invoices
